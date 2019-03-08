@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <EditText
+        android:id="@+id/editText_ip"
+        android:layout_width="144dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="ip"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_port"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="2dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="port"
+        app:layout_constraintStart_toEndOf="@+id/editText_ip"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:text="连接"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_ip" />
+
+    <Button
+        android:id="@+id/button_disconnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="8dp"
+        android:text="断开"
+        app:layout_constraintStart_toEndOf="@+id/button_connect"
+        app:layout_constraintTop_toBottomOf="@+id/editText_port" />
+
+    <Button
+        android:id="@+id/button_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="8dp"
+        android:text="获取仪器信息"
+        app:layout_constraintStart_toEndOf="@+id/button_disconnect"
+        app:layout_constraintTop_toBottomOf="@+id/editText_port" />
+
+    <TextView
+        android:id="@+id/textView_message"
+        android:layout_width="348dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Receive messages from server"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_disconnect" />
+
+    <SurfaceView
+        android:id="@+id/SurfaceView_show"
+        android:layout_width="match_parent"
+        android:layout_height="372dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:text="Recv:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_message" />
+
+    <!--<Button-->
+    <!--android:id="@+id/button3"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginStart="4dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:layout_marginEnd="16dp"-->
+    <!--android:text="send and read"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toEndOf="@+id/button7"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/textView" />-->
+
+
+    <!--<Button-->
+        <!--android:id="@+id/button4"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="13dp"-->
+        <!--android:layout_marginTop="6dp"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:text="sin"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/showSurfaceView" />-->
+
+    <!--<Button-->
+        <!--android:id="@+id/button5"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="48dp"-->
+        <!--android:layout_marginTop="6dp"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:text="square"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/button4"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/showSurfaceView"-->
+        <!--app:layout_constraintVertical_bias="0.0" />-->
+
+
+
+    <!--<Button-->
+        <!--android:id="@+id/button7"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="Read"-->
+        <!--app:layout_constraintEnd_toStartOf="@+id/button3"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/button6"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textView" />-->
+
+
+
+    <!--<Button-->
+        <!--android:id="@+id/button8"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="6dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:text="clear"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.866"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/button5"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/showSurfaceView"-->
+        <!--app:layout_constraintVertical_bias="0.0" />-->
+
+
+
+</android.support.constraint.ConstraintLayout>
