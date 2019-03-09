@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             try {
                 //用输出流发送数据
-                OutputStream.write("*IDN?".toString().getBytes());
+                OutputStream.write(("*IDN?".toString() + "\r\n").getBytes());
                 //发送数据之后会自动断开连接，所以，恢复为最初的状态
                 //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
             } catch (Exception e) {
