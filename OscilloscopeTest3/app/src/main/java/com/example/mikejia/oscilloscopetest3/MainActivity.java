@@ -1,6 +1,7 @@
 package com.example.mikejia.oscilloscopetest3;
 
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -8,9 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -32,14 +37,11 @@ public class MainActivity extends AppCompatActivity {
     EditText port_EditText;//端口对象
     EditText receive_EditText;
     Button button_connect;//链接服务器按钮对象
-    Button button_disconnect;//断开服务器按钮
-    Button button_message;//功能按键
     Socket socket = null;// Socket变量
     boolean buttontitle = true;//定义一个逻辑变量,用于判断连接服务器按钮状态
     boolean RD = false;//用于控制取数据线程是否执行
     OutputStream OutputStream = null;//定义数据输出流,用于发出去
     InputStream InputStream = null;//定义数据输入流,用于写进来
-    public static final String bm = "GBK";//定义编码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,42 +55,112 @@ public class MainActivity extends AppCompatActivity {
 
         //初始化按钮
         button_connect = findViewById(R.id.button_connect);
-        button_disconnect = findViewById(R.id.button_disconnect);
-        button_message = findViewById(R.id.button_message);
+
+        Resources res =getResources();
+        final String[] city=res.getStringArray(R.array.SCPI);//将province中内容添加到数组city中
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner);//获取到spacer1
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,city);//创建Arrayadapter适配器
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {//通过此方法为下拉列表设置点击事件
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(thisif()){
+                    String text= spinner.getItemAtPosition(i).toString();
+                    Toast.makeText(MainActivity.this,text,Toast.LENGTH_SHORT).show();
+                    switch (i){
+                        case 0:
+                            ThreadSendIDN t0 = new ThreadSendIDN();
+                            t0.start();
+                            break;
+                        case 1:
+                            ThreadSendCLS t1 = new ThreadSendCLS();
+                            t1.start();
+                            break;
+                        case 2:
+                            ThreadSendRST t2 = new ThreadSendRST();
+                            t2.start();
+                            break;
+                        case 3:
+                            ThreadSendESE t3 = new ThreadSendESE();
+                            t3.start();
+                            break;
+                        case 4:
+                            ThreadSendESE2 t4 = new ThreadSendESE2();
+                            t4.start();
+                            break;
+                        case 5:
+                            ThreadSendESR2 t5 = new ThreadSendESR2();
+                            t5.start();
+                            break;
+                        case 6:
+                            ThreadSendOPC t6 = new ThreadSendOPC();
+                            t6.start();
+                            break;
+                        case 7:
+                            ThreadSendOPC2 t7 = new ThreadSendOPC2();
+                            t7.start();
+                            break;
+                        case 8:
+                            ThreadSendSRE t8 = new ThreadSendSRE();
+                            t8.start();
+                            break;
+                        case 9:
+                            ThreadSendSRE2 t9 = new ThreadSendSRE2();
+                            t9.start();
+                            break;
+                        case 10:
+                            ThreadSendSTB2 t10 = new ThreadSendSTB2();
+                            t10.start();
+                            break;
+                        case 11:
+                            ThreadSendTST2 t11 = new ThreadSendTST2();
+                            t11.start();
+                            break;
+                        case 12:
+                            ThreadSendWAI t12 = new ThreadSendWAI();
+                            t12.start();
+                            break;
+                    }
+                }else{
+                    return;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
     }
 
-    //发送数据按钮按下
-    public void play(View view) {
-        //验证编辑框用户输入是否合法
-        if (thisif()) {
-            //启动一个新的线程,用于发送数据
-            ThreadSendData t1 = new ThreadSendData();
-            t1.start();
-        } else {
-            return;
-        }
-    }
 
     //链接按钮按下
     public void connect(View view) {
-        //读数据线程可以执行
-        RD = true;
-        //并创建一个新的线程，用于初始化socket
-        Connect_Thread Connect_thread = new Connect_Thread();
-        Connect_thread.start();
-    }
-
-    //断开按钮按下
-    public void disconnect(View view) {
-        try {
-            //取消socket
-            socket.close();
-            //socket设置为空
-            socket = null;
-            //读数据线程不执行
-            RD = false;
-        } catch (Exception e) {
-            e.printStackTrace();
+        //判断按钮状态
+        if(buttontitle == true){
+            //如果被按下，修改状态为按下
+            buttontitle = false;
+            //读数据线程可以执行
+            RD = true;
+            //并创建一个新的线程，用于初始化socket
+            Connect_Thread Connect_thread = new Connect_Thread();
+            Connect_thread.start();
+            //改变按钮标题
+            button_connect.setText("断开连接");
+        }else{
+            //如果按钮已经按下，则改变按钮标题
+            button_connect.setText("连接服务器");
+            //改变按钮的状态变量
+            buttontitle = true;
+            try {
+                //取消socket
+                socket.close();
+                //socket设置为空
+                socket = null;
+                //读数据线程不执行
+                RD = false;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -169,13 +241,182 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    //用线程发送数据
+    //用线程发送*IDN?
 
-    class ThreadSendData extends Thread {
+    class ThreadSendIDN extends Thread {
         public void run() {
             try {
                 //用输出流发送数据
-                OutputStream.write(("*IDN?".toString() + "\r\n").getBytes());
+                OutputStream.write(("*IDN?\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //用线程发送*CLS
+
+    class ThreadSendCLS extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*CLS\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //用线程发送*RST
+
+    class ThreadSendRST extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*RST\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //用线程发送*ESE
+
+    class ThreadSendESE extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*ESE\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //用线程发送*ESE?
+
+    class ThreadSendESE2 extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*ESE?\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //用线程发送*ESR?
+
+    class ThreadSendESR2 extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*ESR?\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //用线程发送*OPC
+
+    class ThreadSendOPC extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*OPC\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //用线程发送*OPC?
+
+    class ThreadSendOPC2 extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*OPC?\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //用线程发送*SRE
+
+    class ThreadSendSRE extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*SRE\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //用线程发送*SRE?
+
+    class ThreadSendSRE2 extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*SRE?\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //用线程发送*STB?
+
+    class ThreadSendSTB2 extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*STB?\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //用线程发送*TST?
+
+    class ThreadSendTST2 extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*TST?\r\n").getBytes());
+                //发送数据之后会自动断开连接，所以，恢复为最初的状态
+                //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //用线程发送*WAI
+
+    class ThreadSendWAI extends Thread {
+        public void run() {
+            try {
+                //用输出流发送数据
+                OutputStream.write(("*WAI\r\n").getBytes());
                 //发送数据之后会自动断开连接，所以，恢复为最初的状态
                 //有个坑要说一下，因为发送完数据还得等待服务器返回，所以，不能把Socket也注销掉
             } catch (Exception e) {
@@ -192,9 +433,8 @@ public class MainActivity extends AppCompatActivity {
         //分别获取ip、端口、数据这三项的内容
         String ip = ip_EditText.getText().toString();
         String port = port_EditText.getText().toString();
-        String data = "*IDN";
         //判断是否有编辑框为空
-        if (ip == null || ip.length() == 0 || port == null || port.length() == 0 || data == null || data.length() == 0){
+        if (ip == null || ip.length() == 0 || port == null || port.length() == 0){
             //如果有空则弹出提示
             message.setMessage("各数据不能为空！");
             AlertDialog m1 = message.create();
